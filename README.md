@@ -258,6 +258,6 @@ MIT License，见 [LICENSE](LICENSE)。
 
 ## 致谢
 
-格式规范部分参考了 [python-altium](https://github.com/) 等开源工作的思路，
-但所有结论均在真实 AD16.1.12 环境实机验证并以 AD 自带样例交叉比对。
+格式规范的推导过程中借鉴了社区里关于 Altium 文件格式的各类逆向笔记，
+但所有结论均在真实 AD16.1.12 环境实机验证，并与 AD 自带样例逐字段交叉比对。
 第三方交叉校验使用 [altium-monkey](https://pypi.org/project/altium-monkey/)。
