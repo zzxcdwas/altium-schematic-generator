@@ -136,3 +136,19 @@ y 翻转正好抵消，所以**文件内角度 = 库角度 + 旋转角**（mod 3
 
 实现见 `src/schlib.py` 的 `_shift_arc_angles()`（注意正则要兼容记录文本末尾无竖线的
 情况，否则每条弧的 ENDANGLE 会漏改）。
+
+## 十、电源端口 ORIENTATION 不参与 y 翻转，翻了一定上下颠倒
+
+Power Port (RECORD=17) 的 ORIENTATION 是**纯显示语义**（符号朝哪边），不参与设计空间
+到文件空间的 y 翻转——需要翻转方向码的只有引脚（方向码决定热点坐标）。发射器如果对
+ORIENTATION 也套用 _flip_dir（1<->3 互换），所有地符号会悄悄上下颠倒。
+
+典型症状：GND 的信号地符号（STYLE=4）三横线朝上、挂在导线上方；VCC 箭头朝下。
+
+权威基线（AD16 自带 30+ 官方样例全量统计）：
+
+- GND / GND 样式（STYLE=3/4）: ORIENTATION=3（朝下），46/46 处一致
+- VCC / VDD / +5V 等电源（STYLE=0/2）: ORIENTATION=1（朝上）
+- VEE 等负电源: ORIENTATION=3（朝下）
+
+调用方应直接传屏幕语义的方向值（GND 传 3、VCC 传 1），发射器原样写入。

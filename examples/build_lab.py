@@ -137,7 +137,7 @@ def build_lab1():
         [_P(R1, "1"), (colL, 100), (colR, 100), _P(R2, "1")],
         [(700, 100), (700, 80)],
     ])
-    sch.port("VCC", 700, 80, style=2, orientation=3)
+    sch.port("VCC", 700, 80, style=2, orientation=1)
 
     # C1/C2 网: 一条集电极竖管串起 R.C / 耦合电容 / 偏置支线 / 外接支线
     sch.wire_net("C1", [
@@ -169,7 +169,7 @@ def build_lab1():
         [_P(R7, "2"), _P(R8, "2")],
         [(700, _Y(R7, "2")), (700, 615)],
     ])
-    sch.port("VEE", 700, 615, style=2, orientation=1)
+    sch.port("VEE", 700, 615, style=2, orientation=3)
 
     # 底部轨: K1 - C3 - N1 - C4 - K2
     sch.wire_net("K1", [
@@ -191,9 +191,9 @@ def build_lab1():
         [_P(Q2, "1"), (_X(Q2, "1"), 600)],
         [_P(P1, "1"), (740, _Y(P1, "1")), (740, 900)],
     ])
-    sch.port("GND", _X(Q1, "1"), 600, style=4, orientation=1)
-    sch.port("GND", _X(Q2, "1"), 600, style=4, orientation=1)
-    sch.port("GND", 740, 900, style=4, orientation=1)
+    sch.port("GND", _X(Q1, "1"), 600, style=4, orientation=3)
+    sch.port("GND", _X(Q2, "1"), 600, style=4, orientation=3)
+    sch.port("GND", 740, 900, style=4, orientation=3)
 
     sch.label("C1", 200, 292)
     sch.label("C2", 1200, 292)
@@ -254,8 +254,8 @@ def _channel(sch, tag, uy):
         [_P(U, "8"), (_X(U, "8"), uy + 130)],
         [_P(R, "8"), (_X(R, "8") - 40, uy + 80), (_X(R, "8") - 40, uy + 130)],
     ])
-    sch.port("GND", _X(U, "8"), uy + 130, style=4, orientation=1)
-    sch.port("GND", _X(R, "8") - 40, uy + 130, style=4, orientation=1)
+    sch.port("GND", _X(U, "8"), uy + 130, style=4, orientation=3)
+    sch.port("GND", _X(R, "8") - 40, uy + 130, style=4, orientation=3)
 
     # VCC: 左竖轨接 BI/RBI/LT (U.4/U.5/U.3); U.16 顶部轨 -> DS 公共阳极
     #      竖轨只跨 uy-30..uy+30, 故不会与下方数据横线 (uy+40..uy+70) 相交。
@@ -271,8 +271,8 @@ def _channel(sch, tag, uy):
         [_P(DS, "3"), (1020, _Y(DS, "3")), (1020, uy - 40)],
         [_P(DS, "8"), (1050, _Y(DS, "8")), (1050, uy - 40)],
     ])
-    sch.port("VCC", 340, uy - 30, style=2, orientation=3)
-    sch.port("VCC", 1080, uy - 60, style=2, orientation=3)
+    sch.port("VCC", 340, uy - 30, style=2, orientation=1)
+    sch.port("VCC", 1080, uy - 60, style=2, orientation=1)
     return U, R, DS
 
 
@@ -323,12 +323,12 @@ def build_lab2():
         [_P(p1, "2"), _P(c1, "1")],
         [(200, 180), (200, 150)],
     ])
-    sch.port("VCC", 200, 150, style=2, orientation=3)
+    sch.port("VCC", 200, 150, style=2, orientation=1)
     sch.wire_net("GND", [
         [_P(c1, "2"), (290, 240), (240, 240)],
         [_P(p1, "1"), (240, 190), (240, 240), (240, 265)],
     ])
-    sch.port("GND", 240, 265, style=4, orientation=1)
+    sch.port("GND", 240, 265, style=4, orientation=3)
 
     sch.note("图4-75 实践题(2): 双路 74LS47AN + Res Pack3 + 共阳数码管", 60, 1010)
     _quiet(sch, show_desig=(p1, p2))

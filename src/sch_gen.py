@@ -201,10 +201,15 @@ class SchDoc:
         self._emit(rec)
 
     def power_port(self, text, x, y, orientation=1, style=4, color=0):
+        # ORIENTATION is display-only (which way the symbol points); it must
+        # NOT go through _flip_dir -- only pin direction codes participate in
+        # the y-flip.  Verified against AD16 stock designs: GND style=4 is
+        # always stored as ORIENTATION=3 (46/46 occurrences), VCC style=2 as
+        # ORIENTATION=1.  Flipping here silently inverted every ground symbol.
         rec = ("|RECORD=17|INDEXINSHEET=%d" % self.next_isheet() + self._x("LOCATION.X", x)
                + self._x("LOCATION.Y", y)
                + "|ORIENTATION=%d|COLOR=%d|STYLE=%d|TEXT=%s|SHOWNETNAME=T"
-               % (self._flip_dir(orientation), color, style, text)
+               % (orientation, color, style, text)
                + utf8_sidecar("TEXT", text))
         self._emit(rec)
 
