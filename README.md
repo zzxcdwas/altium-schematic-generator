@@ -9,6 +9,18 @@
 [![Altium](https://img.shields.io/badge/Altium%20Designer-16.1%20verified-orange.svg)](https://www.altium.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
+**English:** A pure-Python toolkit that writes Altium Designer's native binary `.SchDoc` (OLE2 compound
+file) directly to disk — no COM, no Altium automation, no Altium install needed to generate.
+Parts are taken from Altium's official `.SchLib` / `.IntLib` libraries, hierarchical designs
+(sheet symbols / sheet entries / ports) are supported, and every output can be cross-checked by
+ERC, a geometric audit, and an independent third-party parser ([altium-monkey](https://pypi.org/project/altium-monkey/)).
+Also included: reverse-engineered format documentation for `.SchDoc` and `.PrjPCB`, and a catalog of
+known pitfalls that cost real debugging time.
+
+> 中文简介：纯 Python 写出 AD 原生二进制原理图，不需要 COM / 自动化接口，也不需要装 AD 就能生成。
+> 元件取自 AD 官方库，支持层次化设计，输出可用 ERC、几何审计和第三方解析器三重校验。
+> 另附 `.SchDoc` / `.PrjPCB` 逆向格式文档与踩坑清单。
+
 ---
 
 ## 它解决什么问题
@@ -33,12 +45,13 @@
 ## 快速开始
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/zzxcdwas/altium-schematic-generator.git
 cd altium-schematic-generator
 python examples/01_minimal_schematic.py
 ```
 
 产出 `out/01_minimal.SchDoc` —— 直接用 Altium Designer 打开即可。
+（生成不需要安装 Altium；只有"想在 AD 里看效果"这一步才需要。）
 
 ### 30 行代码出一张图
 
