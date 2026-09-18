@@ -1,0 +1,11 @@
+# 核心生成流程零依赖：仅用标准库
+# 可选依赖用于「第三方交叉校验」和「读取已有文件」
+
+# 用 altium-monkey 回读自己写出的 .SchDoc，独立验算引脚/网表/层次化
+altium-monkey>=0.1
+
+# 读取已有 .SchDoc / .SchLib 的 OLE 容器
+olefile>=0.46
+
+# 生成 SVG 预览（可选，examples 用到）
+# Pillow 仅在做 PNG 栅格化时需要
