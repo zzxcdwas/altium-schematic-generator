@@ -237,6 +237,33 @@ def _num(props, key, default=0):
             return default
 
 
+_ANGLE_RE = re.compile(r"(\|)(STARTANGLE|ENDANGLE)(=)(-?\d+(?:\.\d+)?)(?=\||$)", re.IGNORECASE)
+
+
+def _shift_arc_angles(raw, delta):
+    r"""Add ``delta`` degrees to STARTANGLE/ENDANGLE in a record text.
+
+    Arc records (RECORD=12, also elliptical arcs / pie charts) carry their
+    sweep as STARTANGLE/ENDANGLE.  ``transformed()`` rotates every *point* of
+    a symbol, but an arc's center alone does not define its geometry: the
+    sweep must rotate with the body.  Derivation (verified against the real
+    AD16 render of a rotated Inductor): the y-flip between library space and
+    design space cancels against the emitter's write flip, so the stored file
+    angle is simply lib angle + rotation.  Example: lib Inductor humps span
+    90..180/360..90 (bulge up, horizontal inductor); after rot=270 they must
+    span 0..90/270..360 (bulge sideways, vertical inductor with the hump
+    diameters ALONG the pin axis).  Skipping this turns each hump into a
+    disconnected arch and the coil falls apart visually.
+
+    Note: ``(?=\||$)`` -- _tf_record_text rebuilds the record without a
+    trailing pipe, so the last key must also match at end-of-string.
+    """
+    def repl(m):
+        val = (float(m.group(4)) + delta) % 360.0
+        return "%s%s%s%.3f" % (m.group(1), m.group(2), m.group(3), val)
+    return _ANGLE_RE.sub(repl, raw)
+
+
 class Symbol:
     """A schematic symbol: graphics + pins, all relative to the symbol origin."""
 
@@ -353,8 +380,14 @@ class Symbol:
             q = dict(p)
             q["x"], q["y"], q["direction"] = nx, ny, dr(p["direction"])
             out.pins.append(q)
+        # arcs (and any record with a sweep angle) rotate with the body;
+        # mirror reverses the visual rotation direction (see _shift_arc_angles)
+        delta = (180 - rot) % 360 if mirror else rot
         for props, raw in self.children:
-            out.children.append((props, _tf_record_text(raw, pt)))
+            raw = _tf_record_text(raw, pt)
+            if "STARTANGLE=" in raw.upper() or "ENDANGLE=" in raw.upper():
+                raw = _shift_arc_angles(raw, delta)
+            out.children.append((props, raw))
         return out
 
     def __repr__(self):
